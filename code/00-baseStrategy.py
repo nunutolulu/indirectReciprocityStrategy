@@ -8,6 +8,8 @@
 
 # CCC
 class strategyCCC():
+    name = "CCC"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -17,9 +19,10 @@ class strategyCCC():
         action = (1, 0)
         return action
 
-
 # CCD
 class strategyCCD():
+    name = "CCD"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -37,6 +40,8 @@ class strategyCCD():
 
 # CDC
 class strategyCDC():
+    name = "CDC"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -54,6 +59,8 @@ class strategyCDC():
 
 # CDD
 class strategyCDD():
+    name = "CDD"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -71,6 +78,8 @@ class strategyCDD():
 
 # DCC
 class strategyDCC():
+    name = "DCC"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -88,6 +97,8 @@ class strategyDCC():
 
 # DCD
 class strategyDCD():
+    name = "DCD"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -105,6 +116,8 @@ class strategyDCD():
 
 # DDC
 class strategyDDC():
+    name = "DDC"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -122,6 +135,8 @@ class strategyDDC():
 
 # DDD
 class strategyDDD():
+    name = "DDD"
+
     def __init__(self, repu_self, repu_oppo):
         self.repu_self = repu_self
         self.repu_oppo = repu_oppo
@@ -145,6 +160,7 @@ class score():
     def play(self, action_one, action_other):
         if action_one == action_other and action_one[0] == 1:
             payoff = [3, 3]
+            # repu = [1, 1]
         elif action_one == action_other and action_one[0] == 0:
             payoff = [1, 1]
         elif action_one != action_other and action_one[0] == 1:
@@ -152,3 +168,22 @@ class score():
         elif action_one != action_other and action_one[0] == 0:
             payoff = [5, 0]
         return payoff
+
+
+if __name__ == "__main__":
+
+    # def CCC():
+
+    tmax = 100
+    strategy_list = [strategyCCC(), strategyCCD(), strategyCDC(), strategyCDD(), strategyDCC(), strategyDCD(),
+                     strategyDDC(), strategyDDD()]
+    repu_list = [0, 0, 0, 0, 0, 0, 0, 0]
+    propotion_list = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125]
+    for t in range(tmax):
+        # 两两博弈确定行动
+        for index in range(len(strategy_list)):
+            action_list=[]
+            repu_temp = repu_list[index]
+            for index_oppo in range(len(strategy_list)):
+                repu_oppo = repu_list[index_oppo]
+                # action=
