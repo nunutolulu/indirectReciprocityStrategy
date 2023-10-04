@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 
 if __name__ == "__main__":
+
     def CCC(repu_self, repu_oppo):
         action = (1, 0)
         return action
@@ -93,16 +94,22 @@ if __name__ == "__main__":
         return payoff, repu_change
 
 
-    tmax = 100
-
     # 策略的准备工作
-    strategy_list = [CCC, CCD, CDC, CDD, DCC, DCD, DDC, DDD]
+    strategy_list = ['CCC', 'CCD', 'CDC', 'CDD', 'DCC', 'DCD', 'DDC', 'DDD']
     repu_list = [0, 0, 0, 0, 0, 0, 0, 0]
     propotion_list = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125]
     strategy_len = len(strategy_list)
 
+    # 输出的几个表
+    payoff_mean_time = pd.DataFrame(columns=strategy_list)
+    repu_time = pd.DataFrame(columns=strategy_list)
+    propotion_time = pd.DataFrame(columns=strategy_list)
+
+    tmax = 500
+
     # 正式博弈——演化
     for t in range(tmax):
+        print(t)
         action_total = []
         payoff_total = []
         repu_change_total = []
@@ -115,7 +122,7 @@ if __name__ == "__main__":
             strategy_temp = strategy_list[index]
 
             for index_oppo in range(strategy_len):
-                repu_oppo = repu_oppo[index_oppo]
+                repu_oppo = repu_list[index_oppo]
                 strategy_oppo = strategy_list[index_oppo]
 
                 # 当前的action
@@ -133,6 +140,27 @@ if __name__ == "__main__":
             repu_change_total.append(repu_change_list)
 
         # 各种清算
-        # 1、repu清算
+        # 1、repu更新-按行计算-遍历计算更新
+        repu_change_sum = np.sum(repu_change_total, axis=1)
+        for index in range(strategy_len):
+            repu_change_temp = repu_change_sum[index]
+            repu_list[index] = repu_list[index] + repu_change_temp
+        repu_time.loc[len(repu_time)] = repu_list
 
-        # 2、收益清算、群体适应度清算
+        # 2、收益更新-按行平均值
+        payoff_mean = np.mean(payoff_total, axis=1)
+        payoff_mean_time.loc[len(payoff_mean_time)] = payoff_mean
+
+        # 3、群体适应度更新
+        # 系统平均适应度
+        avg_fitness = np.dot(propotion_list, payoff_mean)
+        # 个体适应度更新
+        for index in range(strategy_len):
+            individual_fitness = payoff_mean[index] * propotion_list[index]
+            propotion_list[index] = individual_fitness / avg_fitness
+        propotion_time.loc[len(propotion_time)] = propotion_list
+
+    # 输出到csv文件
+    propotion_time.to_csv('output/propotion_time.csv', index=True, encoding='utf-8')
+    payoff_mean_time.to_csv('output/payoff_mean_time.csv', index=True, encoding='utf-8')
+    repu_time.to_csv('output/repu_time.csv', index=True, encoding='utf-8')
