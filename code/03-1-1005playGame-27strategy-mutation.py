@@ -454,7 +454,9 @@ if __name__ == "__main__":
 
 
     # 策略的准备工作
-    strategy_list = ['CCC', 'CCD', 'CDC', 'CDD', 'DCC', 'DCD', 'DDC', 'DDD']
+    strategy_list = ['CCC', 'CCD', 'CCR', 'CDC', 'CDD', 'CDR', 'CRC', 'CRD', 'CRR', 'DCC', 'DCD', 'DCR', 'DDC', 'DDD',
+                     'DDR', 'DRC', 'DRD', 'DRR', 'RCC', 'RCD',
+                     'RCR', 'RDC', 'RDD', 'RDR', 'RRC', 'RRD', 'RRR']
     populations = 1000
     arr = list(range(populations))
     # print(arr)
@@ -533,7 +535,7 @@ if __name__ == "__main__":
         #     individual_strategy[index_mutation] = np.random.choice(new_strategy_list, size=1)
         # 突变
         index_mutation = random.randint(0, 99)
-        print(type(index_mutation))
+        # print(type(index_mutation))
         mutation_rate = 0.01
         if random.random() < mutation_rate:
             stra = str(individual_strategy[index_mutation])
