@@ -112,10 +112,10 @@ if __name__ == "__main__":
         another_strategy = individual_strategy[another_index]
         another_repu = repu[another_index]
 
-        action_one = globals()[one_strategy](one_repu, another_repu)
-        action_another = globals()[another_strategy](another_repu, one_repu)
+        action_self = globals()[one_strategy](one_repu, another_repu)
+        action_oppo = globals()[another_strategy](another_repu, one_repu)
 
-        return action_one, action_another
+        return action_self, action_oppo
 
 
     # 得分
@@ -148,9 +148,11 @@ if __name__ == "__main__":
 
 
     # 策略占比统计
-    def propotion_strategy_count(individual_strategy):
-        se = pd.Series(individual_strategy)
-        propotionDict = dict(se.value_counts(normalize=True))
+    def propotion_strategy_count(individual_strategy, strategy_list):
+        # se = pd.Series(individual_strategy)
+        propotionDict = dict()
+        for i in strategy_list:
+            propotionDict[i] = individual_strategy.count(i) / len(individual_strategy)
 
         propotion_df = pd.DataFrame([propotionDict])
         return propotion_df
@@ -163,7 +165,7 @@ if __name__ == "__main__":
 
     payoff_mean_time = pd.DataFrame(columns=np.arange(populations))
     repu_time = pd.DataFrame(columns=np.arange(populations))
-    propotion_time = propotion_strategy_count(individual_strategy)
+    propotion_time = propotion_strategy_count(individual_strategy, strategy_list)
     payoff_mean_time.loc[len(payoff_mean_time)] = payoff_total
     repu_time.loc[len(repu_time)] = repu_total
 
@@ -214,11 +216,20 @@ if __name__ == "__main__":
         if np.random.random(1) < epsilon:
             individual_strategy[update_index[0]] = individual_strategy[update_index[1]]
 
+        # 突变
+        index_mutation = np.random.randint(populations)
+        mutation_rate = 0.01
+        if np.random.random(1) < mutation_rate:
+            stra = np.array(individual_strategy)[index_mutation]
+            # new_strategy_list = strategy_list.remove(stra)
+            new_strategy_list = list(set(strategy_list) - {stra})
+            individual_strategy[index_mutation] = np.random.choice(new_strategy_list, size=1)
+
         payoff_mean_time.loc[len(payoff_mean_time)] = payoff_total
         repu_time.loc[len(repu_time)] = repu_total
-        propotion_now = propotion_strategy_count(individual_strategy)
+        propotion_now = propotion_strategy_count(individual_strategy, strategy_list)
         propotion_time = pd.concat([propotion_time, propotion_now])
     # 输出
-    payoff_mean_time.to_csv('output/payoff_mean_time.csv', index=True, encoding='utf-8')
-    repu_time.to_csv('output/repu_time.csv', index=True, encoding='utf-8')
-    propotion_time.to_csv('output/propotion_time.csv', index=True, encoding='utf-8')
+    payoff_mean_time.to_csv('output/payoff_mean_time_mutation.csv', index=True, encoding='utf-8')
+    repu_time.to_csv('output/repu_time_mutation.csv', index=True, encoding='utf-8')
+    propotion_time.to_csv('output/propotion_time_mutation.csv', index=True, encoding='utf-8')
