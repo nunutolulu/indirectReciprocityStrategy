@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
 
     def propotion():
-        propotion_time = pd.read_csv('output/propotion_time_delta_1_27strategy_mutation.csv', index_col=0,
+        propotion_time = pd.read_csv('output/propotion_time_delta_1_27strategy.csv', index_col=0,
                                      encoding='utf-8')
         times = len(propotion_time)
         x = np.arange(times)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
         plt.plot(x, y_ddc, label='DDC', color='purple')
         plt.plot(x, y_ddd, label='DDD', color='aqua')
-        plt.plot(x, y_ddr, labe='DDR', color='chocolate')
+        plt.plot(x, y_ddr, label='DDR', color='chocolate')
 
         plt.plot(x, y_drc, label='DRC', color='navy')
         plt.plot(x, y_drd, label='DRD', color='royalblue')
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     #     plt.savefig('output/reputation.png', bbox_inches='tight')
     #     plt.show()
 
-    # propotion()
-    propotion_mutation()
+    propotion()
+    # propotion_mutation()
     # payoff_mean()
     # repu()

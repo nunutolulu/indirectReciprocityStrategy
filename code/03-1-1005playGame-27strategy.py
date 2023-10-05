@@ -444,7 +444,7 @@ if __name__ == "__main__":
     payoff_mean_time.loc[len(payoff_mean_time)] = payoff_total
     repu_time.loc[len(repu_time)] = repu_total
 
-    tmax = 20000
+    tmax = 100000
     couple = 10
     delta = 1
     for t in range(tmax):
