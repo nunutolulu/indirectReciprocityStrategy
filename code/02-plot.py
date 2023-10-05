@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
 
     def propotion():
-        propotion_time = pd.read_csv('output/propotion_time_delta.csv', index_col=0,
+        propotion_time = pd.read_csv('output/propotion_time_delta_2_population.csv', index_col=0,
                                      encoding='utf-8')
         times = len(propotion_time)
         x = np.arange(times)
@@ -43,12 +43,12 @@ if __name__ == "__main__":
 
         plt.legend()
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-        plt.savefig('output/propotion_delta.png', bbox_inches='tight')
+        plt.savefig('output/propotion_delta_2_population.png', bbox_inches='tight')
         plt.show()
 
 
     def propotion_mutation():
-        propotion_time = pd.read_csv('output/propotion_time_delta_mutation.csv', index_col=0,
+        propotion_time = pd.read_csv('output/propotion_time_delta_2_population_mutation.csv', index_col=0,
                                      encoding='utf-8')
         times = len(propotion_time)
         x = np.arange(times)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
         plt.legend()
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-        plt.savefig('output/propotion_delta_mutation.png', bbox_inches='tight')
+        plt.savefig('output/propotion_delta_2_population_mutation.png', bbox_inches='tight')
         plt.show()
 
 
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         plt.show()
 
 
-    propotion()
+    # propotion()
     propotion_mutation()
     # payoff_mean()
     # repu()

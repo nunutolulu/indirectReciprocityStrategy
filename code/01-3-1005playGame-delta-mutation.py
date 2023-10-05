@@ -124,17 +124,17 @@ if __name__ == "__main__":
         another_strategy = another_strategy.lstrip('\'')
         another_strategy = another_strategy.rstrip(']')
         another_strategy = another_strategy.rstrip('\'')
-        print('strategy', type(one_strategy), type(another_strategy))
+        # print('strategy', type(one_strategy), type(another_strategy))
         #
         # if isinstance(one_strategy, list):
         #     one_strategy = one_strategy[0]
         # if isinstance(another_strategy, list):
         #     another_strategy = another_strategy[0]
 
-        print('strategy', type(one_strategy), type(another_strategy))
-        print('strategy', one_strategy, another_strategy)
-        print('repu', type(one_repu), type(another_repu))
-        print('index', type(one_index), type(another_index))
+        # print('strategy', type(one_strategy), type(another_strategy))
+        # print('strategy', one_strategy, another_strategy)
+        # print('repu', type(one_repu), type(another_repu))
+        # print('index', type(one_index), type(another_index))
 
         action_self = eval(one_strategy)(one_repu, another_repu, delta)
         action_oppo = eval(another_strategy)(another_repu, one_repu, delta)
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     strategy_list = ['CCC', 'CCD', 'CDC', 'CDD', 'DCC', 'DCD', 'DDC', 'DDD']
     populations = 100
     arr = list(range(populations))
-    print(arr)
+    # print(arr)
     individual_strategy, repu_total, payoff_total = initialCons(populations, strategy_list)
     # repu_total = repu_total.astype(np.float64)
     # individual_strategy = np.array(individual_strategy)
@@ -202,7 +202,7 @@ if __name__ == "__main__":
 
     tmax = 10000
     couple = 5
-    delta = 1
+    delta = 2
     for t in range(tmax):
         print(t)
         index_round = []
@@ -274,6 +274,6 @@ if __name__ == "__main__":
         propotion_now = propotion_strategy_count(individual_strategy, strategy_list)
         propotion_time = pd.concat([propotion_time, propotion_now])
     # 输出
-    payoff_mean_time.to_csv('output/payoff_mean_time_delta_mutation.csv', index=True, encoding='utf-8')
-    repu_time.to_csv('output/repu_time_delta_mutation.csv', index=True, encoding='utf-8')
-    propotion_time.to_csv('output/propotion_time_delta_mutation.csv', index=True, encoding='utf-8')
+    payoff_mean_time.to_csv('output/payoff_mean_time_delta_2_mutation.csv', index=True, encoding='utf-8')
+    repu_time.to_csv('output/repu_time_delta_2_mutation.csv', index=True, encoding='utf-8')
+    propotion_time.to_csv('output/propotion_time_delta_2_mutation.csv', index=True, encoding='utf-8')

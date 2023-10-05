@@ -172,7 +172,7 @@ if __name__ == "__main__":
 
     tmax = 5000
     couple = 5
-    delta = 1
+    delta = 2
     for t in range(tmax):
         print(t)
         index_round = []
@@ -223,6 +223,6 @@ if __name__ == "__main__":
         propotion_now = propotion_strategy_count(individual_strategy, strategy_list)
         propotion_time = pd.concat([propotion_time, propotion_now])
     # 输出
-    payoff_mean_time.to_csv('output/payoff_mean_time_delta.csv', index=True, encoding='utf-8')
-    repu_time.to_csv('output/repu_time_delta.csv', index=True, encoding='utf-8')
-    propotion_time.to_csv('output/propotion_time_delta.csv', index=True, encoding='utf-8')
+    payoff_mean_time.to_csv('output/payoff_mean_time_delta_2.csv', index=True, encoding='utf-8')
+    repu_time.to_csv('output/repu_time_delta_2.csv', index=True, encoding='utf-8')
+    propotion_time.to_csv('output/propotion_time_delta_2.csv', index=True, encoding='utf-8')
