@@ -148,9 +148,12 @@ if __name__ == "__main__":
 
 
     # 策略占比统计
-    def propotion_strategy_count(individual_strategy):
-        se = pd.Series(individual_strategy)
-        propotionDict = dict(se.value_counts(normalize=True))
+    def propotion_strategy_count(individual_strategy, strategy_list):
+        # se = pd.Series(individual_strategy)
+        # propotionDict = dict(se.value_counts(normalize=True))
+        propotionDict = dict()
+        for i in strategy_list:
+            propotionDict[i] = individual_strategy.count(i) / len(individual_strategy)
 
         propotion_df = pd.DataFrame([propotionDict])
         return propotion_df
@@ -163,11 +166,11 @@ if __name__ == "__main__":
 
     payoff_mean_time = pd.DataFrame(columns=np.arange(populations))
     repu_time = pd.DataFrame(columns=np.arange(populations))
-    propotion_time = propotion_strategy_count(individual_strategy)
+    propotion_time = propotion_strategy_count(individual_strategy,strategy_list)
     payoff_mean_time.loc[len(payoff_mean_time)] = payoff_total
     repu_time.loc[len(repu_time)] = repu_total
 
-    tmax = 500
+    tmax = 5000
     couple = 5
     for t in range(tmax):
         print(t)
@@ -216,7 +219,7 @@ if __name__ == "__main__":
 
         payoff_mean_time.loc[len(payoff_mean_time)] = payoff_total
         repu_time.loc[len(repu_time)] = repu_total
-        propotion_now = propotion_strategy_count(individual_strategy)
+        propotion_now = propotion_strategy_count(individual_strategy,strategy_list)
         propotion_time = pd.concat([propotion_time, propotion_now])
     # 输出
     payoff_mean_time.to_csv('output/payoff_mean_time.csv', index=True, encoding='utf-8')

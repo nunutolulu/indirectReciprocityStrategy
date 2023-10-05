@@ -5,6 +5,7 @@
 
 import pandas as pd
 import numpy as np
+import random
 
 if __name__ == "__main__":
 
@@ -84,21 +85,24 @@ if __name__ == "__main__":
         individual_strategy = []
         repu_total = []
         payoff_total = []
+        payoff_temp = float(0)
+        repu_temp = float(0)
         for i in range(populations):
-            strategy_stra = np.random.choice(strategy_list)
+            strategy_stra = random.choice(strategy_list)
+            print('strategy_stra', type(strategy_stra))
+            # print(strategy_stra)
             individual_strategy.append(strategy_stra)
-            repu_total.append(0)
-            payoff_total.append(0)
-
+            repu_total.append(repu_temp)
+            payoff_total.append(payoff_temp)
+        print(individual_strategy)
         return individual_strategy, repu_total, payoff_total
 
 
     # 每次随机选两个，得到行动
-    def chooseTwoIndex(populations):
-        chosenTwoIndex = np.random.choice(populations, size=2, replace=False)
-        one_index = chosenTwoIndex[0]
-        another_index = chosenTwoIndex[1]
-
+    def chooseTwoIndex(arr):
+        chosenTwoIndex = random.sample(arr, 2)
+        one_index = int(chosenTwoIndex[0])
+        another_index = int(chosenTwoIndex[1])
         return one_index, another_index
 
 
@@ -106,14 +110,34 @@ if __name__ == "__main__":
     def chooseTwoAction(index_list, individual_strategy, repu):
         one_index = index_list[0]
         another_index = index_list[1]
-        one_strategy = individual_strategy[one_index]
-        one_repu = repu[one_index]
+        one_strategy = str(individual_strategy[one_index])
+        one_repu = float(repu[one_index])
 
-        another_strategy = individual_strategy[another_index]
-        another_repu = repu[another_index]
+        another_strategy = str(individual_strategy[another_index])
+        another_repu = float(repu[another_index])
 
-        action_self = globals()[one_strategy](one_repu, another_repu)
-        action_oppo = globals()[another_strategy](another_repu, one_repu)
+        one_strategy = one_strategy.lstrip('[')
+        one_strategy = one_strategy.lstrip('\'')
+        one_strategy = one_strategy.rstrip(']')
+        one_strategy = one_strategy.rstrip('\'')
+        another_strategy = another_strategy.lstrip('[')
+        another_strategy = another_strategy.lstrip('\'')
+        another_strategy = another_strategy.rstrip(']')
+        another_strategy = another_strategy.rstrip('\'')
+        print('strategy', type(one_strategy), type(another_strategy))
+        #
+        # if isinstance(one_strategy, list):
+        #     one_strategy = one_strategy[0]
+        # if isinstance(another_strategy, list):
+        #     another_strategy = another_strategy[0]
+
+        print('strategy', type(one_strategy), type(another_strategy))
+        print('strategy', one_strategy, another_strategy)
+        print('repu', type(one_repu), type(another_repu))
+        print('index', type(one_index), type(another_index))
+
+        action_self = eval(one_strategy)(one_repu, another_repu)
+        action_oppo = eval(another_strategy)(another_repu, one_repu)
 
         return action_self, action_oppo
 
@@ -161,7 +185,14 @@ if __name__ == "__main__":
     # 策略的准备工作
     strategy_list = ['CCC', 'CCD', 'CDC', 'CDD', 'DCC', 'DCD', 'DDC', 'DDD']
     populations = 100
+    arr = list(range(populations))
+    print(arr)
     individual_strategy, repu_total, payoff_total = initialCons(populations, strategy_list)
+    # repu_total = repu_total.astype(np.float64)
+    # individual_strategy = np.array(individual_strategy)
+    # individual_strategy = list(map(str, individual_strategy))
+    # repu_total=np.array(repu_total)
+    # repu_total=list(map(int,repu_total))
 
     payoff_mean_time = pd.DataFrame(columns=np.arange(populations))
     repu_time = pd.DataFrame(columns=np.arange(populations))
@@ -169,7 +200,7 @@ if __name__ == "__main__":
     payoff_mean_time.loc[len(payoff_mean_time)] = payoff_total
     repu_time.loc[len(repu_time)] = repu_total
 
-    tmax = 500
+    tmax = 10000
     couple = 5
     for t in range(tmax):
         print(t)
@@ -178,7 +209,11 @@ if __name__ == "__main__":
         repu_change_round = []
         for c in range(couple):
             # 选择两个index
-            index_list = chooseTwoIndex(populations)
+            index_list = chooseTwoIndex(arr)
+            index_list = np.array(index_list)
+            index_list = list(map(int, index_list))
+            # print(index_list)
+            # print(type(index_list))
             # 选择index对应的action
             action_list = chooseTwoAction(index_list, individual_strategy, repu_total)
             # 根据action计算收益、声誉变化
@@ -208,7 +243,7 @@ if __name__ == "__main__":
             repu_total[individual_index] = repu_total[individual_index] + individual_sum_repu_change
 
         # 费米更新规则——更新策略
-        update_index = chooseTwoIndex(populations)
+        update_index = chooseTwoIndex(arr)
         payoff_one = payoff_total[update_index[0]]
         payoff_another = payoff_total[update_index[1]]
         # epsilon = 1.0 / (1 + np.exp(np.sum(payoff_me) - np.sum(payoff_opponent)) / 1)
@@ -216,12 +251,20 @@ if __name__ == "__main__":
         if np.random.random(1) < epsilon:
             individual_strategy[update_index[0]] = individual_strategy[update_index[1]]
 
+        # # 突变
+        # index_mutation = np.random.randint(populations)
+        # mutation_rate = 0.01
+        # if np.random.random(1) < mutation_rate:
+        #     stra = np.array(individual_strategy)[index_mutation]
+        #     # new_strategy_list = strategy_list.remove(stra)
+        #     new_strategy_list = list(set(strategy_list) - {stra})
+        #     individual_strategy[index_mutation] = np.random.choice(new_strategy_list, size=1)
         # 突变
-        index_mutation = np.random.randint(populations)
+        index_mutation = random.randint(0, 99)
+        print(type(index_mutation))
         mutation_rate = 0.01
-        if np.random.random(1) < mutation_rate:
-            stra = np.array(individual_strategy)[index_mutation]
-            # new_strategy_list = strategy_list.remove(stra)
+        if random.random() < mutation_rate:
+            stra = str(individual_strategy[index_mutation])
             new_strategy_list = list(set(strategy_list) - {stra})
             individual_strategy[index_mutation] = np.random.choice(new_strategy_list, size=1)
 
